@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proiect Examen </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function sendDataJson() {
+            $.ajax({
+                url: "sendDataJson.php",
+                type: "POST",
+                success: function(response) {
+                    alert("Datale au fost adaugate cu succes: " + response);
+                
+                },
+                error: function(xhr, status, error) {
+                    alert("Error: " + error);
+                }
+            });
+        }
+
+        function scraping() {
+            $.ajax({
+                url: 'jsonld_scraping.php',
+                dataType: 'json',
+                success: function(response) {
+                    var data = response.data;
+                    var html = "<table border='1'><tr><th>Name</th><th>Email</th><th>Telephone</th><th>Flight Number</th><th>Departure</th></tr>";
+                    data.forEach(function(item) {
+                        html += "<tr><td>" + item.Name + "</td><td>" + item.Email + "</td><td>" + item.Telephone + "</td><td>" + item['Flight Number'] + "</td><td>" + item.Departure + "</td></tr>";
+                    });
+                    html += "</table>";
+                    $('#scraping').html(html);
+
+                    var dropdown = "<select id='reservationDropdown' name='reservationID'>";
+                    data.forEach(function(item) {
+                        dropdown += "<option value='" + item.ReservationID + "'>" + item.ReservationID + " - " + item['Flight Number'] + "</option>";
+                    });
+                    dropdown += "</select>";
+                    $('#dropdown').html(dropdown);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    $('#scraping').html('An error occurred: ' + error);
+                }
+            });
+        }
+
+        function addPerson(event) {
+            event.preventDefault();
+
+            var formData = {
+                reservationID: $('#reservationDropdown').val(),
+                name: $('#personName').val(),
+                email: $('#personEmail').val(),
+                telephone: $('#personTelephone').val()
+            };
+
+            if (!formData.reservationID || !formData.name || !formData.email || !formData.telephone) {
+                alert('All fields are required!');
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: 'insert_data.php',
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                success: function(response) {
+                    alert('Persoana adaugata cu succes in tabelul rezervari');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Error: ' + error);
+                }
+            });
+        }
+
+        function sendToRDF() {
+            $.ajax({
+                url: 'jsonld_scraping.php',
+                dataType: 'json',
+                success: function(response) {
+                    $.ajax({
+                        type: "POST",
+                        url: 'send_rdf.php',
+                        data: JSON.stringify(response.data),
+                        contentType: "application/json",
+                        success: function(response) {
+                            alert('Date trimise catre server');
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Eroare:', error);
+                            alert('Eroare: ' + error);
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Eroare:', error);
+                }
+            });
+        }
+
+        function showDataFromRDF() {
+            $.ajax({
+                url: "get_rdf.php",
+                dataType: 'json',
+                success: function(data) {
+                    var html = "<table border='1'><tr><th>Name</th><th>Email</th><th>Telephone</th><th>Flight Number</th><th>Departure</th></tr>";
+                    data.forEach(function(item) {
+                        html += "<tr><td>" + item.Name + "</td><td>" + item.Email + "</td><td>" + item.Telephone + "</td><td>" + item['Flight Number'] + "</td><td>" + item.Departure + "</td></tr>";
+                    });
+                    html += "</table>";
+                    $('#rdf').html(html);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Eroare:', error);
+                    alert('Eroare ' + error);
+                }
+            });
+        }
+
+        function DataFromJSON() {
+            $.ajax({
+                url: "get_json.php",
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    var table = "<table border='1'><thead><tr><th>Name</th><th>Email</th><th>Telephone</th><th>Flight Number</th><th>Departure</th></tr></thead><tbody>";
+                    data.forEach(function(item) {
+                        table += "<tr><td>" + item.Name + "</td><td>" + item.Email + "</td><td>" + item.Telephone + "</td><td>" + item['Flight Number'] + "</td><td>" + item.Departure + "</td></tr>";
+                    });
+                    table += "</tbody></table>";
+                    $('#json').html(table);
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + error);
+                }
+            });
+        }
+        $(document).ready(function() {
+            $('#scrapeButton').click(scraping);
+            $('#sendRDFButton').click(sendToRDF);
+            $('#fetchRDFButton').click(showDataFromRDF);
+            $('#addPersonForm').submit(addPerson);
+        });
+    </script>
+</head>
+<body>
+    <button id="scrapeButton">Scraping</button>
+    <div id="scraping">Tabel Scraping.</div>
+    <button id="sendRDFButton">Trimite RDF</button>
+    <div id="dropdown">Alege ID</div>
+    <form id="addPersonForm">
+        <input type="text" id="personName" name="personName" placeholder="Name" required>
+        <input type="email" id="personEmail" name="personEmail" placeholder="Email" required>
+        <input type="text" id="personTelephone" name="personTelephone" placeholder="Telephone" required>
+        <button type="submit">Adauga Persoana</button>
+    </form>
+    <button id="fetchRDFButton">Get RDF</button>
+    <div id="rdf">Tabel  RDF.</div>
+    <button onclick="sendDataJson()">Send to Json</button>
+    <button onclick="DataFromJSON()">Get JSON</button>
+    <div id="json">Tabel JSON</div>
+</body>
+</html>

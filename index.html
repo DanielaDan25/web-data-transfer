@@ -1,0 +1,158 @@
+<html>
+<head>
+<script type="application/ld+json" id="sectiunejsonld">
+{
+"@context":{"schema" :"http://schema.org/"},
+"@graph": [
+    [
+      {
+        "@type": "Person",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "clientID",
+          "value": "1"
+        },
+        "name": "PopescuAdrian",
+        "email": "adrian@gemail.com",
+        "telephone": "036280496"
+      },
+      {
+        "@type": "Person",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "clientID",
+          "value": "2"
+        },
+        "name": "DanciucMarta",
+        "email": "marta@yahoo.com",
+        "telephone": "074826565"
+      }
+    ],
+    [
+      {
+        "@type": "FlightReservation",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "reservationID",
+          "value": "1"
+        },
+        "underName": {
+          "@type": "Person",
+          "identifier": "1"
+        },
+        "reservationFor": {
+          "@type": "Flight",
+          "flightNumber": "WZ845",
+          "departureTime": "2024-11-25"
+        }
+      },
+      {
+        "@type": "FlightReservation",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "reservationID",
+          "value": "2"
+        },
+        "underName": {
+          "@type": "Person",
+          "identifier": "2"
+        },
+        "reservationFor": {
+          "@type": "Flight",
+          "flightNumber": "FG664A",
+          "departureTime": "2024-09-01"
+        }
+      },
+      {
+        "@type": "FlightReservation",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "reservationID",
+          "value": "3"
+        },
+        "underName": {
+          "@type": "Person",
+          "identifier": "1"
+        },
+        "reservationFor": {
+          "@type": "Flight",
+          "flightNumber": "AQ852W",
+          "departureTime": "2024-07-12"
+        }
+      },
+      {
+        "@type": "FlightReservation",
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "reservationID",
+          "value": "4"
+        },
+        "reservationFor": {
+          "@type": "Flight",
+          "flightNumber": "AB1234",
+          "departureTime": "2024-10-15"
+        }
+      }
+    ]
+  ]
+}
+</script>
+</head>
+<body>
+  <h1>Passenger's Table</h1>
+  <table border="1">
+    <tr>
+        <th>ID Client</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Popescu Adrian</td>
+        <td>adrian@gemail.com</td>
+        <td>036280496</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Danciuc Marta</td>
+        <td>marta@yahoo.com</td>
+        <td>074826565</td>
+    </tr>
+  </table>
+
+  <h1>Reservation's Table</h1>
+  <table border="1">
+    <tr>
+        <th>ID</th>
+        <th>ID Client</th>
+        <th>Flight Number</th>
+        <th>Depart Time</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>1</td>
+        <td>WZ845</td>
+        <td>2024-11-25</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>2</td>
+        <td>FG664A</td>
+        <td>2024-09-01</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>1</td>
+        <td>AQ852W</td>
+        <td>2024-07-12</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td></td> 
+        <td>AB1234</td>
+        <td>2024-10-15</td>
+    </tr>
+  </table>
+</body>
+</html>
